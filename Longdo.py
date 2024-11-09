@@ -1,8 +1,8 @@
-from streamlit_geolocation import streamlit_geolocation
-from streamlit_folium import st_folium
 import folium
 import requests
 import streamlit as st
+from streamlit_geolocation import streamlit_geolocation
+from streamlit_folium import st_folium
 
 class LocationMap:
     def __init__(self, api_key):
@@ -28,7 +28,11 @@ class LocationMap:
         """Create a Folium map centered on the user's location."""
         if self.lat is not None and self.long is not None:
             self.map = folium.Map(location=[self.lat, self.long], zoom_start=16)
-            folium.Marker([self.lat, self.long], popup="Your Location", tooltip="Your Location").add_to(self.map)
+            # Set user's marker color to red using Icon
+            folium.Marker([self.lat, self.long], 
+                          popup="Your Location", 
+                          tooltip="Your Location", 
+                          icon=folium.Icon(color='red')).add_to(self.map)
         else:
             st.write("Map could not be created due to missing location data.")
 
@@ -81,7 +85,7 @@ if location_map.get_location():
     # Multi-select options for location types
     options = st.multiselect(
         "Select the location of interest",
-        ["hospital", "7-11", "department_store"]
+        ["hospital", "7-11", "department_store", "temple"]
     )
 
     st.write("Selected categories:", ",".join(options))
